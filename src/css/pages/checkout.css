@@ -1,0 +1,57 @@
+.checkout-page h1 {
+  font: 700 82px/.84 var(--display);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.checkout-form label {
+  flex-direction: column;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+}
+
+.checkout-form input {
+  border: 1px solid var(--line);
+  width: 100%;
+  min-height: 44px;
+  color: var(--ink);
+  background: #ffffff8c;
+  border-radius: 0;
+  padding: 0 12px;
+  font-size: 11px;
+}
+
+.checkout-page {
+  min-height: 65vh;
+  padding-top: 80px;
+  padding-bottom: 90px;
+}
+
+.checkout-page h1 {
+  font-size: 64px;
+}
+
+.checkout-form {
+  width: min(480px,100%);
+  margin-top: 35px;
+}
+
+.checkout-form .summary-row {
+  margin-top: 20px;
+}
+
+.checkout-form .button {
+  width: 100%;
+}
+
+@media (max-width: 620px) {
+  .checkout-page {
+    padding-top: 53px;
+  }
+  .checkout-page h1 {
+    font-size: 48px;
+  }
+}

@@ -1,0 +1,368 @@
+/*
+  blogs.css
+  Estilo de la sección de artículos y noticias del sitio.
+  Define la estructura editorial, tarjetas de blog, imagenes, texto y layout responsive.
+*/
+/* ==========================================
+   THE SNEAKER EDITORIAL - THEME
+   ========================================== */
+
+/* Variables locales para mantener la paleta Bulls */
+
+/* Agrega esto al principio de css/blogs.css */
+/* Agrega esto al inicio de css/blogs.css */
+.legacy-page-blog {
+    background: linear-gradient(135deg, #000000 0%, #000000 50%, #FF0033 50%, #FF0033 100%) !important;
+    background-image: linear-gradient(135deg, #000000 0%, #000000 50%, #FF0033 50%, #FF0033 100%) !important;
+    background-attachment: fixed !important;
+    min-height: 100vh;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+.legacy-page-blog {
+  --bulls-red: #FF0033;
+  --dark-bg: #111111;
+  --darker-border: #222222;
+  --text-light: #ffffff;
+  --text-muted: #a9a9a9;
+}
+
+/* Header de la sección */
+.legacy-page-blog .editorial-header {
+  text-align: center;
+  padding: 50px 20px 30px;
+  background: linear-gradient(180deg, rgba(17,17,17,0.8) 0%, rgba(5,5,5,0) 100%);
+}
+
+.legacy-page-blog .editorial-header h1 {
+  color: var(--bulls-red);
+  font-size: 3rem;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 0 0 10px 0;
+}
+
+.legacy-page-blog .editorial-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Contenedor principal de los artículos */
+.legacy-page-blog .editorial-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Separación amplia entre cada artículo */
+}
+
+/* ------------------------------------------
+   TARJETA HORIZONTAL TIPO REVISTA
+   ------------------------------------------ */
+.legacy-page-blog .news-card {
+  display: flex;
+  background-color: var(--dark-bg);
+  border: 1px solid var(--darker-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.legacy-page-blog .news-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--bulls-red);
+  box-shadow: 0 15px 40px rgba(255, 0, 51, 0.15);
+}
+
+/* Contenedor de la Imagen (Izquierda) */
+.legacy-page-blog .news-image-wrapper {
+  width: 45%; /* Ocupa casi la mitad de la tarjeta */
+  position: relative;
+  overflow: hidden;
+  height: 280px;
+  background-color: #000;
+}
+
+.legacy-page-blog .news-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  transition: transform 0.6s ease;
+  display: block;
+  background: #0a0a0a;
+}
+
+.legacy-page-blog .news-card:hover .news-image-wrapper img {
+  transform: scale(1.08); /* Efecto zoom sutil al pasar el mouse */
+}
+
+/* Etiqueta flotante sobre la imagen */
+.legacy-page-blog .news-category {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: var(--bulls-red);
+  color: #fff;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+/* Contenedor de Texto (Derecha) */
+.legacy-page-blog .news-content {
+  width: 55%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.legacy-page-blog .news-meta {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+}
+
+.legacy-page-blog .news-title {
+  color: var(--text-light);
+  font-size: 2rem;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin: 0 0 15px 0;
+  transition: color 0.3s ease;
+}
+
+.legacy-page-blog .news-card:hover .news-title {
+  color: var(--bulls-red);
+}
+
+.legacy-page-blog .news-excerpt {
+  color: #cccccc;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Botón fantasma (Ghost Button) */
+.legacy-page-blog .news-btn {
+  align-self: flex-start;
+  background-color: transparent;
+  color: var(--text-light);
+  border: 2px solid var(--text-light);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.legacy-page-blog .news-btn .arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.legacy-page-blog .news-btn:hover {
+  background-color: var(--text-light);
+  color: var(--dark-bg);
+}
+
+.legacy-page-blog .news-btn:hover .arrow {
+  transform: translateX(6px); /* La flecha se mueve a la derecha */
+}
+
+/* ------------------------------------------
+   ESTADOS DE CARGA Y ERROR
+   ------------------------------------------ */
+.legacy-page-blog .loading-box h3, .legacy-page-blog .empty-state h2 {
+  color: var(--text-light);
+  font-style: italic;
+  font-weight: bold;
+}
+
+.legacy-page-blog .error-box {
+  background-color: rgba(255, 0, 51, 0.1);
+  border: 1px solid var(--bulls-red);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.legacy-page-blog .error-box h3 {
+  color: var(--bulls-red);
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* ------------------------------------------
+   RESPONSIVE (MÓVILES Y TABLETS)
+   ------------------------------------------ */
+@media (max-width: 768px) {
+  .legacy-page-blog .news-card {
+    flex-direction: column; /* Apila la imagen arriba y el texto abajo */
+  }
+  
+  .legacy-page-blog .news-image-wrapper {
+    width: 100%;
+    height: 250px; /* Altura fija para la imagen en móvil */
+  }
+  
+  .legacy-page-blog .news-content {
+    width: 100%;
+    padding: 25px 20px;
+  }
+  
+  .legacy-page-blog .editorial-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .legacy-page-blog .news-title {
+    font-size: 1.6rem;
+  }
+}
+
+.legacy-page-blog .blog-detail-body {
+  background: linear-gradient(180deg, #0d0d0d 0%, #1b1b1b 100%) !important;
+  color: #fff;
+}
+
+.legacy-page-blog .blog-detail-page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 72px 18px 60px;
+}
+
+.legacy-page-blog .blog-detail-card {
+  background: rgba(17, 17, 17, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+}
+
+.legacy-page-blog .blog-detail-article {
+  display: flex;
+  flex-direction: column;
+}
+
+.legacy-page-blog .blog-back-link {
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  margin: 22px 22px 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+}
+
+.legacy-page-blog .blog-back-link:hover {
+  color: #ff0033;
+}
+
+.legacy-page-blog .blog-detail-hero {
+  width: min(100%, 760px);
+  margin: 18px auto 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111;
+}
+
+.legacy-page-blog .blog-detail-hero img {
+  width: 100%;
+  height: 360px;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  filter: saturate(1.05) contrast(1.02);
+  background: #111;
+  padding: 0;
+}
+
+.legacy-page-blog .blog-detail-body-copy {
+  padding: 30px 26px 42px;
+}
+
+.legacy-page-blog .blog-detail-title {
+  font-size: clamp(2.1rem, 4vw, 3.5rem);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  margin: 12px 0 16px;
+  line-height: 1.05;
+}
+
+.legacy-page-blog .blog-detail-summary {
+  color: #d2d2d2;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.legacy-page-blog .blog-detail-content {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.legacy-page-blog .blog-detail-content p {
+  color: #ececec;
+  font-size: 1rem;
+  line-height: 1.9;
+  margin: 0 0 20px;
+}
+
+.legacy-page-blog .blog-detail-content p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .legacy-page-blog .blog-detail-page {
+    padding: 52px 12px 38px;
+  }
+
+  .legacy-page-blog .blog-detail-hero {
+    width: calc(100% - 20px);
+    margin-top: 14px;
+  }
+
+  .legacy-page-blog .blog-detail-hero img {
+    height: 240px;
+  }
+
+  .legacy-page-blog .blog-detail-body-copy {
+    padding: 18px 16px 26px;
+  }
+
+  .legacy-page-blog .blog-detail-summary {
+    font-size: 1rem;
+  }
+}

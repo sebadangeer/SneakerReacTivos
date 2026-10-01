@@ -1,0 +1,243 @@
+/*
+  comprar.css
+  Estilo del checkout y del formulario de pago.
+  Define la apariencia de la tarjeta de crédito, inputs y layout de compra.
+*/
+.legacy-page-payment * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.legacy-page-payment {
+    background-color: #0b101e;
+    /* Patrón de cuadrícula como en la imagen */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 30px 30px;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.legacy-page-payment .checkout-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================
+   TÍTULOS
+   ========================================== */
+.legacy-page-payment .header-titles {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.legacy-page-payment .header-titles h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.legacy-page-payment .header-titles p {
+    color: #00d2ff;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ==========================================
+   TARJETA 3D
+   ========================================== */
+.legacy-page-payment .card-container {
+    width: 100%;
+    max-width: 340px;
+    height: 215px;
+    perspective: 1000px; /* Necesario para el efecto 3D */
+    margin-bottom: 25px;
+    z-index: 2;
+}
+
+.legacy-page-payment .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+}
+
+.legacy-page-payment .card-front, .legacy-page-payment .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Oculta la cara que no está mirando al frente */
+    border-radius: 15px;
+    background: linear-gradient(135deg, #7b2cbf 0%, #3a0ca3 50%, #4361ee 100%);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* FRONTAL */
+.legacy-page-payment .card-logo {
+    text-align: right;
+    font-size: 1.5rem;
+    font-weight: 900;
+    font-style: italic;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.legacy-page-payment .chip-icon {
+    width: 40px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.legacy-page-payment .card-number {
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.legacy-page-payment .card-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.legacy-page-payment .card-details div {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 3px;
+}
+
+/* TRASERA */
+.legacy-page-payment .card-back {
+    transform: rotateY(180deg);
+    padding: 0;
+}
+
+.legacy-page-payment .magnetic-stripe {
+    width: 100%;
+    height: 45px;
+    background-color: #000000;
+    margin-top: 25px;
+}
+
+.legacy-page-payment .signature-area {
+    padding: 0 20px;
+    margin-top: 15px;
+}
+
+.legacy-page-payment .signature-area span {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.8);
+    display: block;
+    margin-bottom: 3px;
+}
+
+.legacy-page-payment .signature-box {
+    background-color: #ffffff;
+    height: 35px;
+    width: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px;
+}
+
+.legacy-page-payment #card-cvv-display {
+    color: #000;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+.legacy-page-payment .cvv-info {
+    font-size: 0.6rem;
+    padding: 0 20px;
+    margin-top: 10px;
+    color: rgba(255,255,255,0.6);
+}
+
+/* ==========================================
+   FORMULARIO
+   ========================================== */
+.legacy-page-payment .payment-form {
+    background-color: #1a1f2e;
+    width: 100%;
+    padding: 25px 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.legacy-page-payment .input-group {
+    margin-bottom: 15px;
+}
+
+.legacy-page-payment .input-group input, .legacy-page-payment .input-group select {
+    width: 100%;
+    background-color: #0f1423;
+    border: 1px solid #2a3143;
+    color: #ffffff;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.legacy-page-payment .input-group input:focus, .legacy-page-payment .input-group select:focus {
+    border-color: #4361ee;
+}
+
+.legacy-page-payment .row-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.legacy-page-payment .select-group {
+    flex: 1;
+}
+
+.legacy-page-payment .cvv-group {
+    flex: 1.2;
+}
+
+.legacy-page-payment .btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #9d4edd 0%, #ff006e 100%);
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 5px 15px rgba(255, 0, 110, 0.3);
+}
+
+.legacy-page-payment .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 0, 110, 0.5);
+}

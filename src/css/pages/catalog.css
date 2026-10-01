@@ -1,0 +1,165 @@
+.catalog-heading h1, .brands-page h1 {
+  font: 700 82px/.84 var(--display);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.catalog-heading {
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+  padding-top: 67px;
+  padding-bottom: 31px;
+  display: flex;
+}
+
+.catalog-heading h1, .brands-page h1 {
+  font-size: 62px;
+}
+
+.search-box {
+  border-bottom: 1px solid var(--ink);
+  align-items: center;
+  gap: 9px;
+  width: 250px;
+  height: 43px;
+  display: flex;
+}
+
+.search-box span {
+  font-size: 23px;
+}
+
+.search-box input {
+  background: 0 0;
+  border: 0;
+  outline: 0;
+  width: 100%;
+  font-size: 11px;
+}
+
+.catalog {
+  padding-bottom: 90px;
+}
+
+.filter-row {
+  gap: 8px;
+  margin-bottom: 24px;
+  display: flex;
+}
+
+.filter-chip {
+  border: 1px solid var(--line);
+  cursor: pointer;
+  color: #52564f;
+  background: 0 0;
+  min-height: 33px;
+  padding: 0 14px;
+  font-size: 9px;
+}
+
+.filter-chip.active, .filter-chip:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--white);
+}
+
+.brands-page {
+  padding-top: 84px;
+  padding-bottom: 100px;
+}
+
+.brands-page h1 {
+  margin-bottom: 39px;
+}
+
+.brand-grid {
+  grid-template-columns: repeat(3,1fr);
+  gap: 15px;
+  display: grid;
+}
+
+.brand-tile {
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  border: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  min-height: 380px;
+  padding: 25px;
+  transition: transform .2s;
+  display: flex;
+}
+
+.brand-tile:hover {
+  transform: translateY(-4px);
+}
+
+.brand-tile>span:first-child {
+  letter-spacing: 1.3px;
+  font-size: 8px;
+}
+
+.brand-tile strong {
+  font: 700 48px/.85 var(--display);
+  text-transform: uppercase;
+}
+
+.brand-arrow {
+  align-self: flex-end;
+  font-size: 28px;
+}
+
+.brand-0 {
+  background: linear-gradient(#0e141014,#0e1410b8),url(../../assets/images/urban.avif) 50%/cover;
+}
+
+.brand-1 {
+  background: linear-gradient(#2f140f14,#2f140fb8),url(../../assets/images/run.avif) 50%/cover;
+}
+
+.brand-2 {
+  background: linear-gradient(#16141214,#161412b8),url(../../assets/images/michael-jordan-1587661339.avif) 50%/cover;
+}
+
+@media (max-width: 620px) {
+  .catalog-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 43px;
+    padding-bottom: 23px;
+  }
+  .catalog-heading h1, .brands-page h1 {
+    font-size: 49px;
+  }
+  .search-box {
+    width: 100%;
+  }
+  .filter-row {
+    padding-bottom: 5px;
+    overflow-x: auto;
+  }
+  .filter-chip {
+    flex: none;
+  }
+  .catalog {
+    padding-bottom: 60px;
+  }
+  .brands-page {
+    padding-top: 53px;
+    padding-bottom: 65px;
+  }
+  .brand-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .brand-tile {
+    min-height: 270px;
+  }
+  .brand-tile strong {
+    font-size: 42px;
+  }
+}

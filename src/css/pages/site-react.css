@@ -1,0 +1,132 @@
+.legacy-root .legacy-notice {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(440px, calc(100% - 24px));
+  padding: 12px 14px;
+  border: 1px solid #393939;
+  border-left: 4px solid #ff0033;
+  border-radius: 4px;
+  background: #111;
+  color: #fff;
+  font: 600 .8rem/1.45 Arial, sans-serif;
+  box-shadow: 0 8px 24px #0009;
+}
+
+.legacy-root .legacy-notice-success {
+  border-left-color: #64ad49;
+}
+
+.legacy-root .legacy-notice button {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  border: 1px solid #444;
+  border-radius: 50%;
+  background: #1c1c1c;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.legacy-root .brands-page-background {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  background-size: 280px;
+  background-repeat: repeat;
+  opacity: .24;
+  pointer-events: none;
+}
+
+.legacy-root .brands-page {
+  z-index: 1;
+}
+
+.legacy-root.legacy-page-access,
+.legacy-root.legacy-page-about,
+.legacy-root.legacy-page-blog,
+.legacy-root.legacy-page-contact {
+  background: linear-gradient(135deg, #000 0%, #000 50%, #ff0033 50%, #ff0033 100%) fixed !important;
+  color: #fff;
+}
+.legacy-root.legacy-page-payment > main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.legacy-root.legacy-page-register {
+  background: linear-gradient(to bottom, #ff0033 0%, #ff0033 50%, #000 50%, #000 100%) fixed !important;
+  color: #fff;
+}
+
+.legacy-root.legacy-page-login {
+  background: linear-gradient(135deg, #000 0%, #000 60%, #ff0033 60%, #ff0033 100%) fixed !important;
+  color: #fff;
+}
+
+.legacy-root.legacy-page-product {
+  background: linear-gradient(108deg, #26272b 62%, #ea3b47 62.1%) fixed !important;
+  color: #fff;
+}
+
+.legacy-root.legacy-page-payment {
+  background-color: #0b101e !important;
+  background-image: linear-gradient(#ffffff0a 1px, transparent 1px), linear-gradient(90deg, #ffffff0a 1px, transparent 1px) !important;
+  background-size: 30px 30px !important;
+  color: #fff;
+}
+
+.legacy-root.legacy-page-admin {
+  background-color: var(--admin-bg) !important;
+  color: var(--admin-ink);
+}
+
+.legacy-root .slider .slide {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.legacy-root .card .info {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+}
+
+.legacy-page-payment {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.legacy-root.legacy-page-payment {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.legacy-root.legacy-page-payment .checkout-wrapper {
+  margin: 0 auto;
+}
+
+@media (max-width: 560px) {
+  .legacy-root .legacy-notice {
+    top: 8px;
+    right: 8px;
+    width: calc(100% - 16px);
+  }
+}

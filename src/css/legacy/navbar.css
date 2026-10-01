@@ -1,0 +1,180 @@
+/*
+  navbar.css
+  Estilo del navbar principal del sitio.
+  Define la barra, menú desktop/mobile, tema oscuro y estado de enlace activo.
+*/
+#site-navbar {
+    position: relative;
+    z-index: 1000;
+    width: 100%;
+    background: #0d0d0d;
+    color: #ffffff;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.site-navbar-inner {
+    min-height: 76px;
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.site-navbar-brand img {
+    display: block;
+    width: auto;
+    height: 120px;
+    max-width: 240px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.25));
+    background: transparent;
+}
+
+.site-navbar-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 22px;
+}
+
+.site-navbar-menu a,
+.site-navbar-account button {
+    color: #ffffff;
+    background: none;
+    border: 0;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.site-navbar-menu a:hover,
+.site-navbar-menu a.active,
+.site-navbar-account button:hover {
+    color: #ff3333;
+}
+
+.site-navbar-menu a.active {
+    border-bottom: 2px solid #ff3333;
+    padding-bottom: 4px;
+}
+
+.site-navbar-cart {
+    border-left: 1px solid #555;
+    padding-left: 22px;
+}
+
+.site-navbar-toggle {
+    display: none;
+    padding: 8px;
+    border: 1px solid #777;
+    background: transparent;
+}
+
+.site-navbar-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    margin: 4px;
+    background: #ffffff;
+}
+
+.site-navbar-account {
+    position: relative;
+}
+
+.site-navbar-account-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 12px);
+    min-width: 160px;
+    padding: 10px;
+    background: #171717;
+    border: 1px solid #444;
+}
+
+.site-navbar-account.is-open .site-navbar-account-menu {
+    display: grid;
+    gap: 12px;
+}
+
+@media (max-width: 900px) {
+    .site-navbar-inner {
+        padding: 12px 20px;
+        flex-wrap: wrap;
+    }
+
+    .site-navbar-brand {
+        flex: 1;
+    }
+
+    .site-navbar-toggle {
+        display: block;
+        margin-left: auto;
+    }
+
+    .site-navbar-menu {
+        display: none;
+        width: 100%;
+        padding: 8px 0 12px;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 14px;
+        order: 3;
+    }
+
+    .site-navbar-menu.is-open {
+        display: flex;
+    }
+
+    .site-navbar-menu a,
+    .site-navbar-account button {
+        width: 100%;
+        text-align: left;
+        white-space: normal;
+        display: block;
+        padding: 6px 0;
+    }
+
+    .site-navbar-cart {
+        border-left: 0;
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .site-navbar-inner {
+        min-height: 64px;
+        padding: 10px 14px;
+        gap: 12px;
+    }
+
+    .site-navbar-brand img {
+        height: 72px;
+        max-width: 180px;
+    }
+
+    .site-navbar-toggle {
+        padding: 6px;
+    }
+
+    .site-navbar-toggle span {
+        width: 18px;
+        margin: 3px 0;
+    }
+
+    .site-navbar-menu {
+        gap: 12px;
+        padding-top: 10px;
+    }
+
+    .site-navbar-menu a,
+    .site-navbar-account button {
+        font-size: 0.72rem;
+        letter-spacing: 0.8px;
+    }
+}
