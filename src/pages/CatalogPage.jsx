@@ -20,7 +20,7 @@ export default function CatalogPage({ routeCategory, categoryProducts, navigate 
       <div className="infinite-carousel" aria-label={`Galería de ${heading}`}><div className="carousel-track">{duplicatedImages.map((image, index) => <img key={`${image}-${index}`} src={getImage(image)} alt="Zapatillas de la colección" loading="lazy" />)}</div></div>
       <section className="titulo-tienda mb-4"><h1>{heading}</h1></section>
       <div className="grid-container" id="productos-contenedor">{categoryProducts.map((product, index) => <ProductCard key={product.id} product={product} index={index} navigate={navigate} />)}</div>
-      {categoryProducts.length === 0 && <p className="cart-status">No se pudieron cargar los productos. Verifica que el servidor esté encendido.</p>}
+      {categoryProducts.length === 0 && <p className="cart-status">No hay productos disponibles en esta categoría.</p>}
     </>
   )
 }

@@ -7,11 +7,15 @@ export function productName(product) {
 }
 
 export function categoryLabel(product) {
-  const category = String(product?.tipoCategoria || product?.tipoCategoriaNombre || '').toLowerCase()
+  const value = product?.tipoCategoria || product?.tipoCategoriaNombre
+  const name = typeof value === 'object' && value !== null
+    ? value.nombreTipoCategoria || value.tipoCategoriaNombre || value.nombre || value.name
+    : value
+  const category = String(name || '').toLowerCase()
   if (category.includes('jordan')) return 'Jordan'
   if (category.includes('sport')) return 'Nike Sports'
   if (category.includes('urban')) return 'Nike Urban'
-  return product?.tipoCategoria || product?.tipoCategoriaNombre || 'Sneakers'
+  return String(name || 'Sneakers').trim()
 }
 
 export function categorySlug(value) {
