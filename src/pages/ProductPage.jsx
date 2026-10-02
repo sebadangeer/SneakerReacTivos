@@ -1,4 +1,4 @@
-import { money, productName } from '../utils/catalog.js'
+import { categoryLabel, money, productName } from '../utils/catalog.js'
 import { resolveProductImage } from '../assets/images.js'
 
 export default function ProductPage({ product, navigate }) {
@@ -13,7 +13,7 @@ export default function ProductPage({ product, navigate }) {
   return (
     <main className="product-hero">
       <div className="product-info">
-        <h1 className="brand-name">{product.tipoCategoria || 'Sneakers'}</h1>
+        <h1 className="brand-name">{categoryLabel(product)}</h1>
         <h2 className="product-title">{productName(product)}</h2>
         <p className="description">{product.descripcion || 'Diseño, comodidad y cultura en cada paso.'}</p>
         <div className="purchase-area"><span className="price">{money(product.precio)}</span><button className="btn-buy" onClick={() => navigate(`/compra?id=${encodeURIComponent(product.id)}`)}>Comprar Ahora</button><button className="btn-back" onClick={() => navigate('/marcas')}>volver atras</button></div>

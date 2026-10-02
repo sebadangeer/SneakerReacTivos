@@ -441,7 +441,8 @@
 
 .legacy-root .form-group input[type="text"],
 .legacy-root .form-group input[type="email"],
-.legacy-root .form-group input[type="tel"] {
+.legacy-root .form-group input[type="tel"],
+.legacy-root .form-group input[type="number"] {
   width: 100%;
   padding: 12px 15px;
   background-color: #050505;

@@ -14,18 +14,19 @@ export function categoryLabel(product) {
   const category = String(name || '').toLowerCase()
   if (category.includes('jordan')) return 'Jordan'
   if (category.includes('sport')) return 'Nike Sports'
-  if (category.includes('urban')) return 'Nike Urban'
+  if (category.includes('urban')) return 'Nike Urbano'
   return String(name || 'Sneakers').trim()
 }
 
 export function categorySlug(value) {
-  return String(value || '')
+  const slug = String(value || '')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
+  return slug === 'nike-urbano' ? 'nike-urban' : slug
 }
 
 export function stockFor(product, size) {

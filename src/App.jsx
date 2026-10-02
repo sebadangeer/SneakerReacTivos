@@ -64,8 +64,8 @@ function App() {
   const [notice, setNotice] = useState(null)
   const [busy, setBusy] = useState(false)
 
-  const navigate = (destination) => {
-    window.history.pushState({}, '', destination)
+  const navigate = (destination, { replace = false } = {}) => {
+    window.history[replace ? 'replaceState' : 'pushState']({}, '', destination)
     setPath(window.location.pathname.toLowerCase())
     setQuery(window.location.search)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -135,7 +135,7 @@ function App() {
   const selectedProduct = products.find((product) => String(product.id) === String(productId))
   const routeCategory = normalizedPath.split('/')[2]
   const categoryProducts = products.filter((product) => {
-    return !routeCategory || categorySlug(categoryLabel(product)) === routeCategory
+    return !routeCategory || categorySlug(categoryLabel(product)) === categorySlug(routeCategory)
   })
   const cartCount = cart.reduce((sum, item) => sum + Number(item.cantidad), 0)
 
@@ -194,7 +194,15 @@ function App() {
       setSession(user)
       setNotice({ type: 'success', text: `¡Bienvenido/a, ${user.pnombre || user.nombreCompleto || email}!` })
       const role = String(user.rol || user.role || '').toUpperCase()
-      navigate(role === 'ADMIN' ? '/admin' : role === 'VENDEDOR' ? '/admin/productos' : '/marcas')
+      const requestedDestination = new URLSearchParams(query).get('redirect')
+      let customerDestination = '/marcas'
+      if (requestedDestination?.startsWith('/')) {
+        const redirectUrl = new URL(requestedDestination, window.location.origin)
+        if (redirectUrl.origin === window.location.origin) {
+          customerDestination = `${redirectUrl.pathname}${redirectUrl.search}${redirectUrl.hash}`
+        }
+      }
+      navigate(role === 'ADMIN' ? '/admin' : role === 'VENDEDOR' ? '/admin/productos' : customerDestination)
     } catch (error) {
       setNotice({ type: 'error', text: error.message || 'No se pudo conectar con el servidor.' })
     } finally { setBusy(false) }
@@ -309,6 +317,10 @@ function App() {
     const form = new FormData(event.currentTarget)
     const email = String(form.get('email')).trim()
     const confirmEmail = String(form.get('confirmEmail')).trim()
+    if (!form.get('region') || !form.get('commune')) {
+      setNotice({ type: 'error', text: 'Selecciona una región y una comuna.' })
+      return
+    }
     const allowedDomain = /^[a-zA-Z0-9._%+-]+@(gmail\.com|duocuc\.cl|profesorduoc\.cl)$/i
     if (!allowedDomain.test(email)) {
       setNotice({ type: 'error', text: 'El correo debe pertenecer a @gmail.com, @duocuc.cl o @profesorduoc.cl.' })
@@ -383,9 +395,9 @@ function App() {
   return (
     <div className={`app-shell legacy-root legacy-page-${pageTheme}`}>
       <Notice notice={notice} onDismiss={() => setNotice(null)} />
-      <SiteHeader session={session} cartCount={cartCount} navigate={navigate} logout={logout} path={normalizedPath} />
+      <SiteHeader key={normalizedPath} session={session} cartCount={cartCount} navigate={navigate} logout={logout} path={normalizedPath} />
       <main>{renderContent()}</main>
-      {!['home', 'product', 'login', 'register', 'payment', 'purchase', 'admin'].includes(pageTheme) && normalizedPath !== '/blog' && <SiteFooter navigate={navigate} />}
+      {!['product', 'login', 'register', 'payment', 'purchase', 'admin'].includes(pageTheme) && normalizedPath !== '/blog' && <SiteFooter navigate={navigate} />}
     </div>
   )
 }

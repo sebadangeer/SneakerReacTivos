@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { getImage } from '../assets/images.js'
+import { getImage, resolveProductImage } from '../assets/images.js'
 import { categorySlug } from '../utils/catalog.js'
 
 function DragonScene() {
@@ -88,18 +88,26 @@ function categoryCardAssets(name) {
 
 export function BrandsPage({ navigate, products }) {
   const [background, setBackground] = useState('')
-  const productCategories = [...new Set(products.map((product) => categoryName(product.tipoCategoria || product.tipoCategoriaNombre)).filter(Boolean))]
+  const productCategories = [...new Map(products
+    .map((product) => product.tipoCategoria || product.tipoCategoriaNombre)
+    .filter(categoryName)
+    .map((category) => [categorySlug(categoryName(category)), category])).values()]
   const [categories, setCategories] = useState(productCategories)
 
   useEffect(() => {
-    const fallbackCategories = [...new Set(products.map((product) => categoryName(product.tipoCategoria || product.tipoCategoriaNombre)).filter(Boolean))]
+    const fallbackCategories = [...new Map(products
+      .map((product) => product.tipoCategoria || product.tipoCategoriaNombre)
+      .filter(categoryName)
+      .map((category) => [categorySlug(categoryName(category)), category])).values()]
     const base = import.meta.env.VITE_API_URL || 'http://localhost:8080'
     const controller = new AbortController()
     fetch(`${base}/api/tipos-categoria`, { signal: controller.signal })
       .then((response) => { if (!response.ok) throw new Error('No se pudieron cargar las categorías.'); return response.json() })
       .then((result) => {
-        const names = Array.isArray(result) ? result.map(categoryName).filter(Boolean) : []
-        if (names.length) setCategories([...new Map(names.map((name) => [categorySlug(name), name])).values()])
+        const availableCategories = Array.isArray(result) ? result.filter(categoryName) : []
+        setCategories(availableCategories.length
+          ? [...new Map(availableCategories.map((category) => [categorySlug(categoryName(category)), category])).values()]
+          : fallbackCategories)
       })
       .catch((error) => { if (error.name !== 'AbortError') setCategories(fallbackCategories) })
     return () => controller.abort()
@@ -110,11 +118,14 @@ export function BrandsPage({ navigate, products }) {
       <div className="brands-page-background" style={{ backgroundImage: background ? `url('${background}')` : 'none' }} aria-hidden="true" />
       <section className="container my-5 text-center brands-page position-relative">
       <h2 className="titulo-banner-marcas">Selecciona <span className="text-bulls-red">Cual</span> de <span className="text-bulls-red">Nuestras</span> Marcas <span className="text-bulls-red">Quieres</span> Ver</h2>
-      <div className="row g-4">{categories.map((name) => {
+      <div className="row g-4">{categories.map((category) => {
+        const name = categoryName(category)
         const assets = categoryCardAssets(name)
+        const image = category?.imagen ? resolveProductImage(category.imagen) : getImage(assets.logo)
+        const cardBackground = getImage(assets.background)
         return <div className="col-md-4" key={categorySlug(name)}>
-        <article className="card brand-card bg-bulls-dark text-white h-100 shadow" data-bg={getImage(assets.background)} onMouseEnter={() => setBackground(getImage(assets.background))} onMouseLeave={() => setBackground('')}>
-          <div className="card-body text-center d-flex flex-column justify-content-between"><div><h3 className="card-title fw-bold text-bulls-red mb-3">{name.toUpperCase()}</h3><img src={getImage(assets.logo)} alt={`${name} logo`} className="img-fluid" /></div>
+        <article className="card brand-card bg-bulls-dark text-white h-100 shadow" data-bg={cardBackground} onMouseEnter={() => setBackground(cardBackground)} onMouseLeave={() => setBackground('')}>
+          <div className="card-body text-center d-flex flex-column justify-content-between"><div><h3 className="card-title fw-bold text-bulls-red mb-3">{name.toUpperCase()}</h3><img src={image} alt={`${name} logo`} className="img-fluid" /></div>
             <button className="btn btn-bulls mt-3" onClick={() => navigate(`/catalogo/${categorySlug(name)}`)}>Ver Colección</button>
           </div>
         </article>

@@ -16,7 +16,7 @@ export function LoginPage({ submitLogin, busy, navigate }) {
       <form id="form-login" onSubmit={submitLogin}>
         <div className="field-group"><label htmlFor="correo">CORREO</label><input name="email" type="email" id="correo" className="custom-input" required /></div>
         <div className="field-group"><label htmlFor="password">CONTRASEÑA</label><input name="password" type="password" id="password" className="custom-input" required /></div>
-        <div className="text-center mt-4"><button type="submit" className="btn-red-submit" disabled={busy}>{busy ? 'Ingresando…' : 'INICIAR SESIÓN'}</button><button type="button" className="btn-back" onClick={() => navigate('/acceso')}>← VOLVER ATRÁS</button></div>
+        <div className="text-center mt-4"><button type="submit" className="btn-red-submit" disabled={busy}>{busy ? 'Ingresando…' : 'INICIAR SESIÓN'}</button><button type="button" className="btn-back" onClick={() => navigate('/acceso', { replace: true })}>← VOLVER ATRÁS</button></div>
       </form>
     </section>
   </main>
@@ -50,7 +50,7 @@ export function RegisterPage({ submitRegistration, busy, navigate }) {
             <input type="hidden" name="commune" value={selectedCommune.toLowerCase().replace(/\s+/g, '-')} required />
           </div>
         </div>
-        <div className="text-center mt-4"><button type="submit" className="btn-red-submit" disabled={busy}>{busy ? 'REGISTRANDO…' : 'REGISTRAR'}</button><button type="button" className="btn-back" onClick={() => navigate('/acceso')}>← VOLVER ATRÁS</button></div>
+        <div className="text-center mt-4"><button type="submit" className="btn-red-submit" disabled={busy}>{busy ? 'REGISTRANDO…' : 'REGISTRAR'}</button><button type="button" className="btn-back" onClick={() => navigate('/acceso', { replace: true })}>← VOLVER ATRÁS</button></div>
       </form>
     </section>
   </main>

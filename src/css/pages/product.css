@@ -159,7 +159,7 @@
 .legacy-page-product .btn-buy {
     order: 4;
     background-color: #ea3b47;
-    color: #ffffff;
+    color: #ffffff !important;
     text-transform: uppercase;
     text-decoration: none;
     font-weight: 600;
@@ -253,6 +253,10 @@
     .legacy-page-product .product-display {
         width: 100% !important;
         max-width: 100% !important;
+    }
+
+    .legacy-page-product .product-display {
+        order: -1;
     }
 
     .legacy-page-product .product-info {

@@ -13,7 +13,7 @@ export default function ContactPage({ setNotice }) {
     <div className="brand-header"><div className="brand-logo-box"><img src={getImage('logo/lgo.png')} alt="Logo Facture Sneakers" className="brand-logo-img" /></div><h1 className="brand-name">FACTURE SNEAKERS</h1></div>
     <section className="custom-card"><h2 className="form-title">FORMULARIO DE CONTACTOS</h2>
       <form id="form-contacto" onSubmit={sendMessage}>
-        <div className="field-group"><label htmlFor="contact-name">NOMBRE COMPLETO</label><input name="name" id="contact-name" className="custom-input" placeholder="Tu nombre completo" required /></div>
+        <div className="field-group"><label htmlFor="contact-name">NOMBRE COMPLETO</label><input name="name" id="contact-name" type="text" className="custom-input" placeholder="Tu nombre completo" required /></div>
         <div className="field-group"><label htmlFor="contact-email">CORREO</label><input name="email" id="contact-email" type="email" className="custom-input" placeholder="usuario@dominio.com" required /></div>
         <div className="field-group"><label htmlFor="contact-message">CONTENIDO</label><textarea name="message" id="contact-message" className="custom-textarea" placeholder="Escribe tu mensaje aquí..." required /></div>
         <div className="text-center mt-4"><button className="btn-red-submit" type="submit">ENVIAR MENSAJE</button></div>
