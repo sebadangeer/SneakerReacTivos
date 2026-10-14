@@ -26,7 +26,10 @@ export default function AdminPage({ session, products, setProducts, setNotice, n
   const categoryOptions = [...new Set(categories.map(categoryName).filter(Boolean))]
 
   useEffect(() => {
-    if (!['ADMIN', 'VENDEDOR'].includes(role)) return undefined
+    if (!['ADMIN', 'VENDEDOR'].includes(role)) {
+      navigate('/')
+      return undefined
+    }
     const controller = new AbortController()
     fetch(categoryApi, { signal: controller.signal })
       .then((response) => { if (!response.ok) throw new Error('No se pudieron cargar los tipos de categoría.'); return response.json() })
@@ -38,9 +41,9 @@ export default function AdminPage({ session, products, setProducts, setNotice, n
       .catch((error) => { if (error.name !== 'AbortError') setCategoryMessage(error.message || 'No se pudieron cargar las categorías.') })
       .finally(() => { if (!controller.signal.aborted) setLoadingCategories(false) })
     return () => controller.abort()
-  }, [categoryApi, role])
+  }, [categoryApi, navigate, role])
 
-  if (!['ADMIN', 'VENDEDOR'].includes(role)) return <section className="page-shell admin-page"><p className="eyebrow">ACCESO RESTRINGIDO</p><h1>Inicia sesión para administrar.</h1><button className="button button-dark" onClick={() => navigate('/login')}>Ir a iniciar sesión</button></section>
+  if (!['ADMIN', 'VENDEDOR'].includes(role)) return null
   const addSize = () => setSizes((entries) => [...entries, { size: '', stock: '' }])
   const resetProduct = () => { setName(''); setDescription(''); setCategory(''); setPrice(''); setImage(''); setSizes([{ size: '', stock: '' }]); setEditingProduct(null) }
   const saveProduct = async (event) => {
