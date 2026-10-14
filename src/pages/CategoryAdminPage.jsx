@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import AdminNavigation from '../components/AdminNavigation.jsx'
 
 function categoryName(category) {
   if (typeof category === 'string') return category.trim()
@@ -18,6 +19,7 @@ export default function CategoryAdminPage({ session, navigate }) {
   const categoryApi = `${base}/api/tipos-categoria`
 
   useEffect(() => {
+    if (role !== 'ADMIN') return undefined
     const controller = new AbortController()
     fetch(categoryApi, { signal: controller.signal })
       .then((response) => { if (!response.ok) throw new Error('No se pudieron cargar los tipos de categoría.'); return response.json() })
@@ -25,7 +27,7 @@ export default function CategoryAdminPage({ session, navigate }) {
       .catch((error) => { if (error.name !== 'AbortError') setMessage(error.message) })
       .finally(() => { if (!controller.signal.aborted) setLoading(false) })
     return () => controller.abort()
-  }, [categoryApi])
+  }, [categoryApi, role])
 
   if (role !== 'ADMIN') return <section className="admin-page"><p className="eyebrow">ACCESO RESTRINGIDO</p><h1>Solo un administrador puede gestionar categorías.</h1><button className="button button-dark" onClick={() => navigate('/admin')}>Volver a administración</button></section>
 
@@ -116,11 +118,7 @@ export default function CategoryAdminPage({ session, navigate }) {
   return <section className="page-shell admin-page">
     <p className="eyebrow">GESTIÓN DE TIENDA</p>
     <h1>Tipos de categoría</h1>
-    <div className="admin-tabs">
-      <button onClick={() => navigate('/admin/productos')}>Productos</button>
-      <button className="active" aria-current="page">Categorías</button>
-      <button onClick={() => navigate('/admin/usuarios')}>Usuarios</button>
-    </div>
+    <AdminNavigation activePath="/admin/categorias" role={role} navigate={navigate} />
     <div className="admin-layout">
       <form className="product-form" onSubmit={saveCategory}>
         <h2>{editingId === null ? 'Crear tipo de categoría' : 'Editar tipo de categoría'}</h2>

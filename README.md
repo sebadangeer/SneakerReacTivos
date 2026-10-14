@@ -41,6 +41,10 @@ La única fuente de disponibilidad es `tallasDisponibles`, con el formato `{ "40
 - `/carrito` y `/checkout`
 - `/login` y `/registro`
 - `/nosotros`, `/contacto` y `/blogs`
-- `/admin/productos` y `/admin/usuarios`
+- `/admin` dashboard
+- `/admin/ordenes`, `/admin/productos`, `/admin/categorias` y `/admin/usuarios`
+- `/admin/reportes`, `/admin/perfil` y `/admin/tienda`
+
+Las órdenes consultan `GET /api/boletas` y abren el detalle con `GET /api/boletas/{id}`. Los indicadores de ventas usan `GET /api/boletas/resumen`; si la lista global no está disponible, se intenta consultar el historial del usuario activo cuando su identificador es numérico. El historial de cada cliente continúa usando `GET /api/clientes/{clienteId}/boletas`. El reporte de inventario se calcula con `tallasDisponibles`.
 
 La sesión y el carrito se conservan en `localStorage`. La autorización real debe validarse también en el backend.

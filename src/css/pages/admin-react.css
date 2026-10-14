@@ -135,8 +135,145 @@
   font-size: .85rem;
 }
 
+.legacy-page-admin .admin-tabs {
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 24px;
+}
+
+.legacy-page-admin .admin-tabs button {
+  padding: 10px 12px;
+}
+
+.legacy-page-admin .admin-metrics,
+.legacy-page-admin .admin-report-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.legacy-page-admin .admin-metrics article,
+.legacy-page-admin .admin-report-metrics article {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--admin-line);
+  background: #fff;
+}
+
+.legacy-page-admin .admin-metrics article:nth-child(1) { border-top: 3px solid #1672ed; }
+.legacy-page-admin .admin-metrics article:nth-child(2) { border-top: 3px solid #198754; }
+.legacy-page-admin .admin-metrics article:nth-child(3) { border-top: 3px solid #e6a700; }
+.legacy-page-admin .admin-metrics span,
+.legacy-page-admin .admin-report-metrics span { color: var(--admin-muted); font-size: .78rem; font-weight: 700; }
+.legacy-page-admin .admin-metrics strong,
+.legacy-page-admin .admin-report-metrics strong { font-size: 1.8rem; line-height: 1; }
+.legacy-page-admin .admin-metrics small,
+.legacy-page-admin .admin-report-metrics small { color: var(--admin-muted); font-size: .75rem; }
+
+.legacy-page-admin .admin-home .admin-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.legacy-page-admin .admin-home .admin-option {
+  min-height: 210px;
+  padding: 22px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.legacy-page-admin .admin-home .admin-option strong {
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+
+.legacy-page-admin .admin-home .admin-option-description { font-size: .84rem; }
+.legacy-page-admin .admin-home .admin-option-number { top: 18px; right: 20px; }
+.legacy-page-admin .admin-home .admin-option-arrow { margin-top: 16px; }
+.legacy-page-admin .admin-data-panel { margin-top: 28px; }
+.legacy-page-admin .admin-data-panel .panel-heading { align-items: center; margin-bottom: 12px; }
+.legacy-page-admin .admin-data-panel .panel-heading h2 { margin: 0; }
+.legacy-page-admin .admin-data-panel .panel-heading > button,
+.legacy-page-admin .admin-product-row > button {
+  width: auto;
+  padding: 8px 10px;
+  border: 1px solid var(--admin-line);
+  background: #fff;
+  color: var(--admin-ink);
+  cursor: pointer;
+}
+
+.legacy-page-admin .admin-search {
+  display: grid;
+  width: min(100%, 280px);
+  gap: 6px;
+  margin: 0;
+}
+
+.legacy-page-admin .admin-search input { padding: 9px 10px; }
+.legacy-page-admin .admin-row-actions { flex-wrap: wrap; }
+.legacy-page-admin .admin-inline-action { border: 0; background: transparent; color: var(--admin-red-dark); cursor: pointer; font-weight: 700; }
+.legacy-page-admin .admin-order-detail { margin-top: 24px; padding: 22px; border: 1px solid var(--admin-line); background: #f8f8f8; }
+.legacy-page-admin .admin-order-detail .panel-heading { align-items: center; }
+.legacy-page-admin .admin-order-detail .panel-heading h2 { margin: 0; }
+.legacy-page-admin .admin-order-detail .panel-heading button { width: auto; padding: 8px 10px; border: 1px solid var(--admin-line); background: #fff; cursor: pointer; }
+.legacy-page-admin .admin-report-metrics { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.legacy-page-admin .admin-report-metrics article:nth-child(3) { border-top: 3px solid #e6a700; }
+.legacy-page-admin .admin-report-metrics article:nth-child(4) { border-top: 3px solid #198754; }
+.legacy-page-admin .stock-level {
+  display: grid;
+  width: 44px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid #e6a700;
+  color: #805d00;
+  font-weight: 800;
+}
+
+.legacy-page-admin .admin-profile-form { width: min(100%, 720px); margin-top: 28px; }
+.legacy-page-admin .admin-store-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, .65fr);
+  gap: 30px;
+  margin-top: 28px;
+  padding: 30px;
+  border: 1px solid var(--admin-line);
+  background: #fff;
+}
+
+.legacy-page-admin .admin-store-summary h2 { margin: 0 0 10px; font-size: 1.6rem; }
+.legacy-page-admin .admin-store-summary p:not(.eyebrow) { color: var(--admin-muted); }
+.legacy-page-admin .admin-store-summary dl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; }
+.legacy-page-admin .admin-store-summary dl div { padding: 14px; background: #f2f1ee; }
+.legacy-page-admin .admin-store-summary dt { color: var(--admin-muted); font-size: .75rem; }
+.legacy-page-admin .admin-store-summary dd { margin: 7px 0 0; font-size: 1.4rem; font-weight: 800; }
+.legacy-page-admin .admin-store-products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.legacy-page-admin .admin-store-products article { display: grid; gap: 6px; padding: 14px; border: 1px solid var(--admin-line); }
+.legacy-page-admin .admin-store-products span { color: var(--admin-muted); font-size: .75rem; }
+
+@media (max-width: 1000px) {
+  .legacy-page-admin .admin-home .admin-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .legacy-page-admin .admin-report-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 850px) {
   .legacy-page-admin .admin-layout {
     grid-template-columns: 1fr;
   }
+
+  .legacy-page-admin .admin-store-summary { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .legacy-page-admin .admin-metrics,
+  .legacy-page-admin .admin-report-metrics,
+  .legacy-page-admin .admin-home .admin-options,
+  .legacy-page-admin .admin-store-products { grid-template-columns: 1fr; }
+  .legacy-page-admin .admin-data-panel .panel-heading { align-items: stretch; flex-direction: column; }
+  .legacy-page-admin .admin-search { width: 100%; }
+  .legacy-page-admin .admin-store-summary { padding: 20px 14px; }
 }

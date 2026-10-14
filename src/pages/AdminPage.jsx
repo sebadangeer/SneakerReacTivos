@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { categoryLabel, productName } from '../utils/catalog.js'
 import { resolveProductImage } from '../assets/images.js'
+import AdminNavigation from '../components/AdminNavigation.jsx'
 
 function categoryName(category) {
   if (typeof category === 'string') return category.trim()
   return String(category?.nombreTipoCategoria || category?.tipoCategoriaNombre || category?.nombre || category?.name || '').trim()
 }
 
-export default function AdminPage({ path, session, products, setProducts, setNotice, navigate }) {
+export default function AdminPage({ session, products, setProducts, setNotice, navigate }) {
   const role = String(session?.rol || session?.role || '').toUpperCase()
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -19,19 +20,13 @@ export default function AdminPage({ path, session, products, setProducts, setNot
   const [image, setImage] = useState('')
   const [sizes, setSizes] = useState([{ size: '', stock: '' }])
   const [editingProduct, setEditingProduct] = useState(null)
-  const [users, setUsers] = useState([])
-  const [userForm, setUserForm] = useState({ nombreCompleto: '', email: '', contrasena: '', numero: '', direccion: '', region: '', comuna: '' })
-  const [editingUser, setEditingUser] = useState(null)
-  const [adminMessage, setAdminMessage] = useState('')
-  const [loadingUsers, setLoadingUsers] = useState(false)
   const base = import.meta.env.VITE_API_URL || 'http://localhost:8080'
   const productApi = `${base}/api/productos`
-  const customerApi = `${base}/api/clientes`
   const categoryApi = `${base}/api/tipos-categoria`
   const categoryOptions = [...new Set(categories.map(categoryName).filter(Boolean))]
 
   useEffect(() => {
-    if (path !== '/admin/productos') return undefined
+    if (!['ADMIN', 'VENDEDOR'].includes(role)) return undefined
     const controller = new AbortController()
     fetch(categoryApi, { signal: controller.signal })
       .then((response) => { if (!response.ok) throw new Error('No se pudieron cargar los tipos de categoría.'); return response.json() })
@@ -43,19 +38,7 @@ export default function AdminPage({ path, session, products, setProducts, setNot
       .catch((error) => { if (error.name !== 'AbortError') setCategoryMessage(error.message || 'No se pudieron cargar las categorías.') })
       .finally(() => { if (!controller.signal.aborted) setLoadingCategories(false) })
     return () => controller.abort()
-  }, [categoryApi, path])
-
-  useEffect(() => {
-    if (path !== '/admin/usuarios' || role !== 'ADMIN') return undefined
-    const controller = new AbortController()
-    setLoadingUsers(true)
-    fetch(customerApi, { signal: controller.signal })
-      .then((response) => { if (!response.ok) throw new Error('No se pudo cargar la lista de usuarios.'); return response.json() })
-      .then((result) => { setUsers(Array.isArray(result) ? result : []); setAdminMessage('') })
-      .catch((error) => { if (error.name !== 'AbortError') setAdminMessage(error.message) })
-      .finally(() => setLoadingUsers(false))
-    return () => controller.abort()
-  }, [path, role])
+  }, [categoryApi, role])
 
   if (!['ADMIN', 'VENDEDOR'].includes(role)) return <section className="page-shell admin-page"><p className="eyebrow">ACCESO RESTRINGIDO</p><h1>Inicia sesión para administrar.</h1><button className="button button-dark" onClick={() => navigate('/login')}>Ir a iniciar sesión</button></section>
   const addSize = () => setSizes((entries) => [...entries, { size: '', stock: '' }])
@@ -84,34 +67,6 @@ export default function AdminPage({ path, session, products, setProducts, setNot
       resetProduct()
     } catch (error) { setNotice({ type: 'error', text: error.message || 'No se pudo conectar con el inventario.' }) }
   }
-  const saveUser = async (event) => {
-    event.preventDefault()
-    if (!editingUser && !userForm.contrasena) { setNotice({ type: 'error', text: 'La contraseña es obligatoria para crear un usuario.' }); return }
-    const payload = Object.fromEntries(Object.entries(userForm).filter(([key, value]) => key !== 'contrasena' || value))
-    try {
-      const response = await fetch(editingUser ? `${customerApi}/${editingUser}` : customerApi, { method: editingUser ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-      if (!response.ok) throw new Error((await response.text()) || 'No se pudo guardar el usuario.')
-      const result = await fetch(customerApi)
-      if (result.ok) setUsers(await result.json())
-      setUserForm({ nombreCompleto: '', email: '', contrasena: '', numero: '', direccion: '', region: '', comuna: '' })
-      setEditingUser(null)
-      setNotice({ type: 'success', text: 'Usuario guardado correctamente.' })
-    } catch (error) { setNotice({ type: 'error', text: error.message || 'No se pudo conectar con usuarios.' }) }
-  }
-  const editUser = (user) => {
-    setEditingUser(user.id ?? user.idCliente)
-    setUserForm({ nombreCompleto: user.nombreCompleto || user.pnombre || '', email: user.email || '', contrasena: '', numero: user.numero || '', direccion: user.direccion || '', region: user.region || '', comuna: user.comuna || '' })
-  }
-  const deleteUser = async (user) => {
-    const id = user.id ?? user.idCliente
-    if (!window.confirm(`¿Eliminar la cuenta de ${user.nombreCompleto || user.email}?`)) return
-    try {
-      const response = await fetch(`${customerApi}/${id}`, { method: 'DELETE' })
-      if (!response.ok) throw new Error((await response.text()) || 'No se pudo eliminar el usuario.')
-      setUsers((items) => items.filter((entry) => String(entry.id ?? entry.idCliente) !== String(id)))
-      setNotice({ type: 'success', text: 'Usuario eliminado correctamente.' })
-    } catch (error) { setNotice({ type: 'error', text: error.message || 'No se pudo eliminar el usuario.' }) }
-  }
   const editProduct = (product) => {
     setEditingProduct(product.id)
     setName(productName(product)); setDescription(product.descripcion || ''); setCategory(categoryLabel(product)); setPrice(String(product.precio || '')); setImage(product.linkImagen || '')
@@ -127,44 +82,12 @@ export default function AdminPage({ path, session, products, setProducts, setNot
       setNotice({ type: 'success', text: 'Producto eliminado del catálogo.' })
     } catch (error) { setNotice({ type: 'error', text: error.message || 'No se pudo eliminar el producto.' }) }
   }
-  const changeUser = (field, value) => setUserForm((current) => ({ ...current, [field]: value }))
   return (
     <section className="page-shell admin-page">
       <p className="eyebrow">GESTIÓN DE TIENDA</p>
-      <h1>{path === '/admin/usuarios' ? 'Administración' : 'Productos'}</h1>
-      <div className="admin-tabs">
-        <button className={path === '/admin/productos' ? 'active' : ''} onClick={() => navigate('/admin/productos')}>Productos</button>
-        {role === 'ADMIN' && <button className={path === '/admin/usuarios' ? 'active' : ''} onClick={() => navigate('/admin/usuarios')}>Usuarios</button>}
-      </div>
-      {path === '/admin/usuarios' && role === 'ADMIN' ? (
-        <div className="admin-layout">
-          <form className="product-form" onSubmit={saveUser}>
-            <h2>{editingUser ? 'Editar usuario' : 'Nuevo usuario'}</h2>
-            <label>Nombre completo<input required value={userForm.nombreCompleto} onChange={(event) => changeUser('nombreCompleto', event.target.value)} /></label>
-            <label>Correo<input required type="email" value={userForm.email} onChange={(event) => changeUser('email', event.target.value)} /></label>
-            <label>Contraseña<input type="password" maxLength="10" required={!editingUser} value={userForm.contrasena} onChange={(event) => changeUser('contrasena', event.target.value)} /></label>
-            <label>Teléfono<input value={userForm.numero} onChange={(event) => changeUser('numero', event.target.value)} /></label>
-            <label>Dirección<input value={userForm.direccion} onChange={(event) => changeUser('direccion', event.target.value)} /></label>
-            <label>Región<input required value={userForm.region} onChange={(event) => changeUser('region', event.target.value)} /></label>
-            <label>Comuna<input required value={userForm.comuna} onChange={(event) => changeUser('comuna', event.target.value)} /></label>
-            <button className="button button-red">{editingUser ? 'Actualizar usuario' : 'Guardar usuario'}</button>
-            {editingUser && <button className="button button-dark" type="button" onClick={() => { setEditingUser(null); setUserForm({ nombreCompleto: '', email: '', contrasena: '', numero: '', direccion: '', region: '', comuna: '' }) }}>Cancelar edición</button>}
-          </form>
-          <div className="products-panel">
-            <h2>Usuarios ({users.length})</h2>
-            {adminMessage && <p className="admin-message">{adminMessage}</p>}
-            {loadingUsers && <p className="admin-message">Cargando usuarios…</p>}
-            <div className="admin-product-list">
-              {users.map((user) => <div className="admin-product-row" key={user.id ?? user.idCliente}>
-                <div className="user-initial">{(user.nombreCompleto || user.pnombre || user.email || 'U').slice(0, 1).toUpperCase()}</div>
-                <div><strong>{user.nombreCompleto || user.pnombre || 'Sin nombre'}</strong><span>{user.email} · {user.region || 'Sin región'} / {user.comuna || 'Sin comuna'}</span></div>
-                <div className="admin-row-actions"><button aria-label="Editar usuario" onClick={() => editUser(user)}>Editar</button><button aria-label="Eliminar usuario" onClick={() => deleteUser(user)}>Eliminar</button></div>
-              </div>)}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="admin-layout">
+      <h1>Productos</h1>
+      <AdminNavigation activePath="/admin/productos" role={role} navigate={navigate} />
+      <div className="admin-layout">
           <form className="product-form" onSubmit={saveProduct}>
             <h2>{editingProduct ? 'Editar producto' : 'Nuevo producto'}</h2>
             <label>Nombre del modelo<input required value={name} onChange={(event) => setName(event.target.value)} /></label>
@@ -194,8 +117,7 @@ export default function AdminPage({ path, session, products, setProducts, setNot
               </div>)}
             </div>
           </div>
-        </div>
-      )}
+      </div>
     </section>
   )
 }

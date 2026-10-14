@@ -8,6 +8,7 @@ import './css/pages/login.css'
 import './css/pages/access.css'
 import './css/pages/register.css'
 import './css/pages/payment.css'
+import './css/pages/receipt.css'
 import './css/pages/blog.css'
 import './css/pages/about.css'
 import './css/pages/contact.css'
@@ -23,12 +24,15 @@ import ProductPage from './pages/ProductPage.jsx'
 import CartPage from './pages/CartPage.jsx'
 import { AccessPage, LoginPage, RegisterPage } from './pages/AccountPages.jsx'
 import AdminPage from './pages/AdminPage.jsx'
+import AdminUsersPage from './pages/AdminUsersPage.jsx'
 import CategoryAdminPage from './pages/CategoryAdminPage.jsx'
 import ContactPage from './pages/ContactPage.jsx'
 import CheckoutPage from './pages/CheckoutPage.jsx'
+import ReceiptPage from './pages/ReceiptPage.jsx'
 import PurchasePage from './pages/PurchasePage.jsx'
 import PaymentPage from './pages/PaymentPage.jsx'
 import AdminHomePage from './pages/AdminHomePage.jsx'
+import { AdminOrdersPage, AdminProfilePage, AdminReportsPage, AdminStorePage } from './pages/AdminOperationalPages.jsx'
 
 const initialProducts = [
   { id: 'air-max-90', nombreModelo: 'Air Max 90', tipoCategoria: 'Nike Urban', precio: 129990, linkImagen: getImage('urban/90.png'), tallasDisponibles: { 39: 2, 40: 4, 41: 3, 42: 1, 43: 2 }, descripcion: 'Una silueta icónica que combina comodidad diaria y actitud urbana.' },
@@ -55,6 +59,46 @@ function readStorage(key, fallback) {
   try { return JSON.parse(localStorage.getItem(key)) ?? fallback } catch { return fallback }
 }
 
+async function readOrderResponse(response) {
+  const body = await response.text()
+  if (!body) return {}
+  try { return JSON.parse(body) } catch { return {} }
+}
+
+function createReceipt(orderData, cart, session, address) {
+  const order = orderData?.boleta || orderData?.data || orderData || {}
+  const orderItems = order.detalleBoletas || order.detalles || order.items || order.productos
+  const items = Array.isArray(orderItems) && orderItems.length
+    ? orderItems.map((item) => ({
+      name: item.nombreProducto || item.producto?.nombreModelo || item.nombre || 'Producto',
+      size: String(item.talla ?? item.size ?? ''),
+      quantity: Number(item.cantidad || 1),
+      price: Number(item.precioUnitario ?? item.precio ?? item.producto?.precio ?? 0),
+    }))
+    : cart.map((item) => ({
+      name: item.nombre || 'Producto',
+      size: String(item.talla || ''),
+      quantity: Number(item.cantidad || 1),
+      price: Number(item.precio || 0),
+    }))
+  const orderTotal = Number(order.total ?? order.totalBoleta ?? order.montoTotal ?? order.importe)
+  const customerName = session?.nombreCompleto
+    || [session?.pnombre, session?.snombre, session?.apaterno, session?.sapellido].filter(Boolean).join(' ')
+    || session?.email
+    || 'Cliente'
+
+  return {
+    id: order.id ?? order.idBoleta ?? order.numeroBoleta ?? null,
+    date: order.fechaEmision || order.fecha || order.createdAt || new Date().toISOString(),
+    customerName,
+    email: session?.email || session?.correo || '—',
+    address,
+    paymentMethod: order.metodoPago || order.formaPago || 'Pendiente de confirmación',
+    items,
+    total: Number.isFinite(orderTotal) ? orderTotal : items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+  }
+}
+
 function App() {
   const [path, setPath] = useState(window.location.pathname.toLowerCase())
   const [query, setQuery] = useState(window.location.search)
@@ -63,6 +107,7 @@ function App() {
   const [session, setSession] = useState(() => readStorage('usuarioSesion', null))
   const [notice, setNotice] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [receipt, setReceipt] = useState(() => readStorage('sneakersLastReceipt', null))
 
   const navigate = (destination, { replace = false } = {}) => {
     window.history[replace ? 'replaceState' : 'pushState']({}, '', destination)
@@ -286,10 +331,15 @@ function App() {
         body: JSON.stringify({ metodoPago: 'Pendiente', direccion: address }),
       })
       if (!response.ok) throw new Error((await response.text()) || 'No se pudo crear la boleta.')
+      const orderData = await readOrderResponse(response)
+      const nextReceipt = createReceipt(orderData, cart, session, address)
       const clearResponse = await fetch(`${base}/api/clientes/${session.id}/carrito`, { method: 'DELETE' })
       if (!clearResponse.ok) throw new Error((await clearResponse.text()) || 'La compra se creó, pero no se pudo vaciar el carrito.')
+      localStorage.setItem('sneakersLastReceipt', JSON.stringify(nextReceipt))
+      setReceipt(nextReceipt)
       setCart([])
       setNotice({ type: 'success', text: 'Compra realizada con éxito.' })
+      navigate('/compra-exitosa')
     } catch (error) {
       setNotice({ type: 'error', text: error.message || 'No se pudo completar la compra.' })
     } finally {
@@ -303,11 +353,16 @@ function App() {
     setBusy(true)
     try {
       const base = import.meta.env.VITE_API_URL || 'http://localhost:8080'
-      const response = await fetch(`${base}/api/clientes/${session.id}/boletas`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ metodoPago: 'Pendiente', direccion: new FormData(event.currentTarget).get('address') }) })
+      const address = String(new FormData(event.currentTarget).get('address') || '')
+      const response = await fetch(`${base}/api/clientes/${session.id}/boletas`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ metodoPago: 'Pendiente', direccion: address }) })
       if (!response.ok) throw new Error((await response.text()) || 'No se pudo confirmar la compra.')
+      const orderData = await readOrderResponse(response)
+      const nextReceipt = createReceipt(orderData, cart, session, address)
+      localStorage.setItem('sneakersLastReceipt', JSON.stringify(nextReceipt))
+      setReceipt(nextReceipt)
       setCart([])
       setNotice({ type: 'success', text: 'Compra confirmada. Gracias por elegir Facture Sneakers.' })
-      navigate('/')
+      navigate('/compra-exitosa')
     } catch (error) { setNotice({ type: 'error', text: error.message || 'No se pudo completar la compra.' }) }
     finally { setBusy(false) }
   }
@@ -368,13 +423,20 @@ function App() {
     if (normalizedPath === '/login') return <LoginPage submitLogin={submitLogin} busy={busy} navigate={navigate} />
     if (normalizedPath === '/registro') return <RegisterPage submitRegistration={submitRegistration} busy={busy} navigate={navigate} />
     if (normalizedPath === '/checkout') return <CheckoutPage cart={cart} session={session} submitCheckout={submitCheckout} busy={busy} />
+    if (normalizedPath === '/compra-exitosa') return <ReceiptPage receipt={receipt} navigate={navigate} />
     if (normalizedPath === '/nosotros') return <AboutPage navigate={navigate} />
     if (normalizedPath === '/contacto') return <ContactPage setNotice={setNotice} />
     if (normalizedPath === '/blogs') return <JournalPage navigate={navigate} />
     if (normalizedPath === '/blog') return <BlogDetailPage blogId={productId} navigate={navigate} />
-    if (normalizedPath === '/admin') return <AdminHomePage session={session} navigate={navigate} />
+    if (normalizedPath === '/admin') return <AdminHomePage session={session} products={products} navigate={navigate} />
     if (normalizedPath === '/admin/categorias') return <CategoryAdminPage session={session} navigate={navigate} />
-    if (normalizedPath.startsWith('/admin')) return <AdminPage path={normalizedPath} session={session} products={products} setProducts={setProducts} setNotice={setNotice} navigate={navigate} />
+    if (normalizedPath === '/admin/usuarios') return <AdminUsersPage session={session} navigate={navigate} setNotice={setNotice} />
+    if (normalizedPath === '/admin/ordenes') return <AdminOrdersPage session={session} navigate={navigate} />
+    if (normalizedPath === '/admin/reportes') return <AdminReportsPage session={session} products={products} navigate={navigate} />
+    if (normalizedPath === '/admin/perfil') return <AdminProfilePage session={session} onSessionUpdate={(nextSession) => { localStorage.setItem('usuarioSesion', JSON.stringify(nextSession)); setSession(nextSession) }} navigate={navigate} />
+    if (normalizedPath === '/admin/tienda') return <AdminStorePage session={session} products={products} navigate={navigate} />
+    if (normalizedPath === '/admin/productos') return <AdminPage session={session} products={products} setProducts={setProducts} setNotice={setNotice} navigate={navigate} />
+    if (normalizedPath.startsWith('/admin')) return <AdminHomePage session={session} products={products} navigate={navigate} />
     return <HomePage navigate={navigate} />
   }
 
@@ -386,6 +448,7 @@ function App() {
     : normalizedPath === '/carrito' ? 'cart'
     : normalizedPath === '/pago' ? 'payment'
     : normalizedPath === '/compra' ? 'purchase'
+    : normalizedPath === '/compra-exitosa' ? 'receipt'
     : normalizedPath === '/nosotros' ? 'about'
     : normalizedPath === '/contacto' ? 'contact'
     : normalizedPath.startsWith('/admin') ? 'admin'
@@ -397,7 +460,7 @@ function App() {
       <Notice notice={notice} onDismiss={() => setNotice(null)} />
       <SiteHeader key={normalizedPath} session={session} cartCount={cartCount} navigate={navigate} logout={logout} path={normalizedPath} />
       <main>{renderContent()}</main>
-      {!['product', 'login', 'register', 'payment', 'purchase', 'admin'].includes(pageTheme) && normalizedPath !== '/blog' && <SiteFooter navigate={navigate} />}
+      {!['product', 'login', 'register', 'payment', 'purchase', 'receipt', 'admin'].includes(pageTheme) && normalizedPath !== '/blog' && <SiteFooter navigate={navigate} />}
     </div>
   )
 }
